@@ -20,7 +20,7 @@
 ## - Cycle through characters in phrase.                               ##
 ## - Alternate between adding and subtracting the number values of key ##
 ## to/from phrase character values (a=1, b=2, etc.)                    ##
-## - Turn result back into letter. 	                                   ##
+## - Turn result back into letter. 	                               ##
 ## - Every second character is upper case.                             ##
 ## - After every second character, add sum of letter values of two     ##
 ## preceding characters.                                               ##
