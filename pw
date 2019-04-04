@@ -20,7 +20,7 @@
 ## - Cycle through characters in phrase.                               ##
 ## - Alternate between adding and subtracting the number values of key ##
 ## to/from phrase character values (a=1, b=2, etc.)                    ##
-## - Turn result back into letter. 	                               ##
+## - Turn result back into letter.                                     ##
 ## - Every second character is upper case.                             ##
 ## - After every second character, add sum of letter values of two     ##
 ## preceding characters.                                               ##
@@ -284,14 +284,13 @@ for ((i=1; i<=${#key}; i++))
 
 echo Your passphrase is: $pwd_char"!"
 
-secs=5
+secs=15
 while [ $secs -gt 0 ]; do
-   echo -ne "$secs\033[0K\r"
+   echo -ne "Please copy your password now, your display will be cleared in $secs seconds.\033[0K\r"
    sleep 1
    : $((secs--))
+
 done
 
-while [ $secs -eq 0 ]; do
-	clear
-done
+sleep $secs; clear
 
