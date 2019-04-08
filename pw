@@ -8,6 +8,10 @@
 ##                                                                     ##
 ##  pw mastodon                                                        ##
 ##                                                                     ##
+## You may also add a number which is going to be the number of        ##
+## seconds your resulting password will be shown before it's cleared.  ##
+## The default is 10 seconds if no number is entered.                  ##
+##                                                                     ##
 ## The script will then ask for a key. This can be any combination     ##
 ## of integers and should be at least 6 figures (in order to get a     ##
 ## sufficiently long password), for example:                           ##
@@ -35,6 +39,8 @@
 ##################
 
 phrase=$1
+
+secs=$2
 
 ##################
 # If phrase is not used as argument, let's ask for it - and clean up our inputs. Lowercase only and no spaces!
@@ -279,18 +285,21 @@ for ((i=1; i<=${#key}; i++))
 	done
 	
 ##################	
-# Add a little pizzazz with a "!"	
+# Add a little pizzazz with a "!"
+# and clear password after x seconds for security reasons (default is 10)
 ##################
 
-echo Your passphrase is: $pwd_char"!"
 
-secs=15
+if [[ -z $secs ]]; then
+	secs=10
+fi
+
 while [ $secs -gt 0 ]; do
-   echo -ne "Please copy your password now, your display will be cleared in $secs seconds.\033[0K\r"
+   echo -ne "Your password: $pwd_char! Please copy your password now, your display will be cleared in $secs seconds...\033[999D\r"
    sleep 1
    : $((secs--))
 
 done
 
-sleep $secs; clear
-
+sleep $secs; 
+echo "Your password has been cleared.                                                                                         "
