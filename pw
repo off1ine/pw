@@ -1,35 +1,27 @@
 #!/bin/bash
 
 #########################################################################
-##  Welcome to the Automatic Password Creator!                         ##
-##                                                                     ##
-## In order to use this script, simply add a phrase after the 'pw'     ##
-## command. For example:                                               ##
-##                                                                     ##
-##  pw mastodon                                                        ##
-##                                                                     ##
-## You may also add a number which is going to be the number of        ##
-## seconds your resulting password will be shown before it's cleared.  ##
-## The default is 10 seconds if no number is entered.                  ##
-##                                                                     ##
-## The script will then ask for a key. This can be any combination     ##
-## of integers and should be at least 6 figures (in order to get a     ##
-## sufficiently long password), for example:                           ##
-##                                                                     ##
-##  123456      (don't actually use that, though!)                     ##
-##                                                                     ##
-## If you don't give the phrase as an argument, we will ask for it.    ##
-##                                                                     ##
-## Password construction works as follows:                             ##
-## - Cycle through characters in phrase.                               ##
-## - Alternate between adding and subtracting the number values of key ##
-## to/from phrase character values (a=1, b=2, etc.)                    ##
-## - Turn result back into letter.                                     ##
-## - Every second character is upper case.                             ##
-## - After every second character, add sum of letter values of two     ##
-## preceding characters.                                               ##
-## - If sum is greater than 16, display as hex, otherwise display      ##
-## cross sum as decimal.                                               ##
+##
+## Welcome to the Automatic Password Creator!
+##
+## In order to use this script, simply add a phrase after the 'pw' command. For example:
+##
+##  pw twitter
+##
+## (If you don't give the phrase as an argument, we will ask for it.)
+## The script will then ask for a key. This can be any combination of integers and letters and should be at least 6 figures (in order to get a sufficiently long password). 
+## Make sure this key is secret and remains the same so you are able to reconstruct the password if you have to, for example:
+##
+##  123456abc      (don't actually use that, though!)
+## 
+## Construction of the resulting password construction works as follows:
+## - Cycle through characters in phrase.
+## - Alternate between adding and subtracting the number values of key to/from phrase character values (a=1, b=2, etc.)
+## - Turn result back into letter.
+## - Every second character is upper case.
+## - After every second character, add sum of letter values of two preceding characters.
+## - If sum is greater than 16, display as hex, otherwise display cross sum as decimal.
+##
 #########################################################################
 
 
@@ -40,46 +32,25 @@
 
 phrase=$1
 
-secs=$2
-
 ##################
 # If phrase is not used as argument, let's ask for it - and clean up our inputs. Lowercase only and no spaces!
 ##################
 
 if [[ -z $phrase ]]; then
 	echo
-	echo "Phrase (letters only, please. Spaces are allowed but will be removed.):"
+	echo -e "Phrase\n(Letters or numbers only, no special characters. Spaces are allowed but will be removed.):"
 	read phrase
 fi
+echo
 
 phrase=${phrase,,}
 phrase=${phrase//[[:space:]]/}
 
-##################
-# Exit if phrase contains numbers (currently not supported. Remove this when supported!)
-##################
-
-re='^[a-z]+$'
-if ! [[ $phrase =~ $re ]] ; then
-   echo "error: Please only use letters from a-z for your phrase." >&2; exit 1
-fi
-
-echo
-echo "Key (numbers only, please.):"
-
+echo -e "Key\n(Letters or numbers only, no special characters. Spaces are allowed but will be removed.):"
 read -s key
 echo
 
 key=${key//[[:space:]]/}
-
-##################
-# Exit if key contains letters
-##################
-
-re='^[0-9]+$'
-if ! [[ $key =~ $re ]] ; then
-   echo "error: Please only use integers from 0-9 for your key." >&2; exit 1
-fi
 
 
 ##################
@@ -146,7 +117,7 @@ numbers[26]="z"
 
 ##################
 # Start with some basics - phrase and keys at i
-# Include previous values for i mod 2 = 0 (we will need these later for some sums!)
+# Include previous values for i > 1 (we will need these later for some sums!)
 ##################
 
 
@@ -159,22 +130,15 @@ for ((i=1; i<=${#key}; i++))
 		if [[ $i>${#phrase} ]]; then
 			phrase_i=${phrase:$i-${#phrase}-1:1}
 
-##################
-# Check for i mod 2 and get previous values			
-##################
-			if [[ $i%2 -eq 0 ]]; then
+			if [[ $i -gt 1 ]]; then
 				phrase_i_prev=${phrase:$i-${#phrase}-2:1}
 			else
 				phrase_i_prev=""
 			fi
 		else
 			phrase_i=${phrase:$i-1:1};
-
-##################
-# Check for i mod 2 and get previous values
-##################
-
-	 		if [[ $i%2 -eq 0 ]]; then
+			
+	 		if [[ $i -gt 1 ]]; then
 	 			phrase_i_prev=${phrase:$i-2:1};
 	 		else
 	 			phrase_i_prev=""
@@ -182,23 +146,41 @@ for ((i=1; i<=${#key}; i++))
 	 	fi
 	 		 	
  		key_i=${key:$i-1:1}
-
-##################
-# Check for i mod 2 and get previous values
-##################
  		
- 		if [[ $i%2 -eq 0 ]]; then
+ 		if [[ $i -gt 1 ]]; then
  			key_i_prev=${key:$i-2:1}
  		else
  			key_i_prev=""
  		fi
  								
 ##################
+# Define Regex looking for numbers (in phrase)
+##################
+
+reP='^[0-9]+$' 						
+
+##################
+# Define Regex looking for letters (in key)
+##################
+
+reK='^[a-z]+$'		
+ 								
+##################
 # Get letter value from phrase at i
 # Get passphrase letter from addition/subtraction of key at i
 ##################
 		
-	 	phrase_num=${letters[$phrase_i]}
+		if [[ $phrase_i =~ $reP ]]; then
+			phrase_num=$phrase_i
+		else
+		 	phrase_num=${letters[$phrase_i]}
+		fi
+		if [[ $key_i =~ $reK ]] ; then
+			key_i=${letters[$key_i]}
+		else
+			key_i=$key_i
+		fi
+		
 		pwd_num=$(($phrase_num+key_i))
 		pwd_sum=""
 		
@@ -216,21 +198,26 @@ for ((i=1; i<=${#key}; i++))
 			pwd_num=$pwd_num
 		fi
 
-##################		
-# Check for i mod 2 and get previous values
-##################
+
 
 	 	pwd_num_prev=""
-
+	 	
 ##################		
+# Check if i > 1 and get previous values
 # If pwd_num_prev is greater than 26, count up from 1
 # If it's less than zero, count back from 26
 # If it's between 1 and 26, do nothing
 ##################
 	 	
- 		if [[ $i%2 -eq 0 ]]; then
- 			phrase_num_prev=${letters[$phrase_i_prev]}
+ 		if [[ $i -gt 1 ]]; then
+ 			if [[ $phrase_i_prev =~ $reP ]]; then
+ 				phrase_num_prev=$phrase_i_prev
+ 			else
+ 				phrase_num_prev=${letters[$phrase_i_prev]}
+ 			fi
+ 			
 			pwd_num_prev=$(($phrase_num_prev+$key_i_prev))
+			
 			if [[ $pwd_num_prev -gt 26 ]]; then
 				pwd_num_prev=$(($pwd_num_prev-26))
 			elif [[ $pwd_num_prev -le 0 ]]; then
@@ -242,12 +229,12 @@ for ((i=1; i<=${#key}; i++))
 			pwd_num=$(($phrase_num-$key_i))
 		
 			if [[ $pwd_num -gt 26 ]]; then
-			pwd_num=$(($pwd_num-26))
-		elif [[ $pwd_num -le 0 ]]; then
-			pwd_num=$((26-($pwd_num*-1)))
-		elif [[ $pwd_num -gt 0 ]] && [[ $pwd_num -le 26 ]]; then
-			pwd_num=$pwd_num
-		fi
+				pwd_num=$(($pwd_num-26))
+			elif [[ $pwd_num -le 0 ]]; then
+				pwd_num=$((26-($pwd_num*-1)))
+			elif [[ $pwd_num -gt 0 ]] && [[ $pwd_num -le 26 ]]; then
+				pwd_num=$pwd_num
+			fi
 		
 ##################		
 # $pwd_sum is displayed after each to pwd characters, adding the values of the past two letters. 
@@ -266,15 +253,14 @@ for ((i=1; i<=${#key}; i++))
 ##################		
 # ...otherwise display cross sum
 ##################
-				while [[ ${#pwd_sum}>1 ]]
-				do
-				pwd_sum=$(($(echo $pwd_sum | sed -e 's/\(.\)/\1\ +\ /g') 0))
+				while [[ ${#pwd_sum}>1 ]]; do
+					pwd_sum=$(($(echo $pwd_sum | sed -e 's/\(.\)/\1\ +\ /g') 0))
 				done
 			fi
  		fi 				
 
 ################## 		
-# Check for i mod 2 and get previous values. Display every second pwd_char as upper case.
+# Check if i mod 2 = 0 and get previous values. Display every second pwd_char as upper case.
 ##################
 
 		if [[ $i%2 -eq 0 ]]; then
@@ -286,20 +272,6 @@ for ((i=1; i<=${#key}; i++))
 	
 ##################	
 # Add a little pizzazz with a "!"
-# and clear password after x seconds for security reasons (default is 10)
 ##################
+echo "Your password: "$pwd_char"!" 
 
-
-if [[ -z $secs ]]; then
-	secs=10
-fi
-
-while [ $secs -gt 0 ]; do
-   echo -ne "Your password: $pwd_char! Please copy your password now, your display will be cleared in $secs seconds...\033[999D\r"
-   sleep 1
-   : $((secs--))
-
-done
-
-sleep $secs; 
-echo "Your password has been cleared.                                                                                         "
