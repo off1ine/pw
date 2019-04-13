@@ -157,25 +157,25 @@ for ((i=1; i<=${#key}; i++))
 # Define Regex looking for numbers (in phrase)
 ##################
 
-reP='^[0-9]+$' 						
+reP='^[a-z]+$'		
 
 ##################
 # Define Regex looking for letters (in key)
 ##################
 
-reK='^[a-z]+$'		
- 								
+reK='^[0-9]+$' 														
+
 ##################
 # Get letter value from phrase at i
 # Get passphrase letter from addition/subtraction of key at i
 ##################
 		
-		if [[ $phrase_i =~ $reP ]]; then
+		if ! [[ $phrase_i =~ $reP ]]; then
 			phrase_num=$phrase_i
 		else
 		 	phrase_num=${letters[$phrase_i]}
 		fi
-		if [[ $key_i =~ $reK ]] ; then
+		if ! [[ $key_i =~ $reK ]] ; then
 			key_i=${letters[$key_i]}
 		else
 			key_i=$key_i
@@ -210,7 +210,7 @@ reK='^[a-z]+$'
 ##################
 	 	
  		if [[ $i -gt 1 ]]; then
- 			if [[ $phrase_i_prev =~ $reP ]]; then
+ 			if ! [[ $phrase_i_prev =~ $reP ]]; then
  				phrase_num_prev=$phrase_i_prev
  			else
  				phrase_num_prev=${letters[$phrase_i_prev]}
