@@ -49,6 +49,8 @@
 
 phrase=$1
 
+secs=$2
+
 ##################
 # If phrase is not used as argument, let's ask for it - and clean up our inputs. Lowercase only and no spaces!
 ##################
@@ -299,3 +301,17 @@ reK='^[0-9]+$'
 ##################
 echo "Your password: "$pwd_char"!" 
 
+if [[ -z $secs ]]; then
+	secs=10
+else 
+	secs=$2
+fi
+
+while [ $secs -gt 0 ]; do
+   echo -ne "Copy your password now! It will be removed in $secs seconds.\033[K\r"
+   sleep 1
+   : $((secs--))
+done
+echo -ne "\r\033[K"
+echo -ne "\033[1A"
+echo -ne "\r\033[K"
