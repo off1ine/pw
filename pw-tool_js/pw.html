@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<title>PW tool</title>
+<link type="text/css" rel="stylesheet" href="https://d3c5ul3qhfq5ek.cloudfront.net/pool/guistrap-theme-material/1.17.1/css3/guistrap.min.css"/>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://dynappdwsr8he.cloudfront.net/pool/guistrap-theme-material/1.17.1/js/guistrap.min.js"></script>
+<link href="pw.css" rel="stylesheet" type="text/css">
+<script src="https://kit.fontawesome.com/895f375116.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="jBox-1.0.5/dist/jBox.all.min.js"></script>
+<link href="jBox-1.0.5/dist/jBox.all.min.css" rel="stylesheet">
+
+<script type="text/javascript" src="pw.js"></script>
+
+  </head>
+  <body>
+<div class="outer-wrapper">
+  <div class="container">
+    <div class="inner">
+      <form class="form">
+        <label class="phrase_label" for="phrase">Phrase <i class="tooltip_phrase fas fa-info-circle"></i></label>
+        <input class="input_phrase" placeholder="Your phrase" type="text" id="phrase" value=""></br>
+        <label class="key_label" for="key">Key <i class="tooltip_key fas fa-info-circle"></i></label>
+        <input label="key" placeholder="Your secret key" class="input_key" type="password" id="key" value=""></br>
+        <div class="validation" id="validation"></div>
+        <input class="button-go" id="button-go" type="button" value="Generate & Copy" onclick="password()"></br>
+
+        </form>
+
+        <textarea disabled id="pwd" class="textarea"></textarea>
+      </div>
+    </div>
+</div>
+  </body>
+</html>

@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+
+  height: 100%;
+  background-image: linear-gradient(0deg, #bbb, #eee);
+  background-repeat:no-repeat;
+  overflow: hidden;
+}
+
+ .outer-wrapper {
+
+  width:500px;
+  float:left;
+  margin: 20px auto 0 20px;
+  text-align:left;
+}
+
+ .container {
+
+  display:inline-block;
+  margin: 0;
+  text-align: left;
+  width: 500px;
+  height: 150px;
+  float:left;
+
+
+}
+
+.inner {
+  display: inline-block;
+  text-align: right;
+
+}
+
+.phrase_label {
+
+  font-size: 1.3em;
+  font-weight: 100;
+
+}
+
+.input_phrase {
+
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  height: 2.3em;
+  padding: 0 0 0 10px;
+  margin: 5px;
+  font-size: 1.5em;
+  font-weight: 200;
+  color: #666;
+  width: 200px;
+}
+
+.key_label {
+
+  font-size: 1.3em;
+  font-weight: 100;
+}
+
+.input_key {
+
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  height: 2.3em;
+  padding: 0 0 0 10px;
+  margin: 5px 5px 0 5px;
+  font-size: 1.5em;
+  font-weight: 200;
+  color: #666;
+  width: 200px;
+
+}
+
+.button-go {
+
+  color: #fff;
+  background-color: #f37064;
+  border-color: #e36054;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  transition: box-shadow .28s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
+  padding: 10px 0;
+  margin: 10px 5px -10px 5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: inline;
+  font-size: 16px;
+  width: 210px;
+
+  text-transform:uppercase;
+  font-weight: 500;
+}
+
+.button-go:hover {
+
+  color: #fff;
+  background-color: #d35044;
+  border-color: #c34034;
+}
+
+.button-go:active {
+
+  color: #fff;
+  background-color: #f37064;
+  border-color: #e36054;
+}
+
+.textarea, textarea:hover, textarea:focus, textarea:active {
+
+  vertical-align: center;
+  text-align: center;
+  resize: none;
+  width: 197px;
+  height: 33px;
+  border:1 px solid #bbb;
+  color: #bbb;
+  padding-top: 10px;
+  margin-top:20px;
+  display: none;
+}
+
+/* .form {
+
+  text-align: right;
+
+} */
+
+.validation {
+
+  height: 20px;
+  font-size: 10px;
+  font-weight: 400;
+  color: red;
+  margin: 10px 5px 0 0;
+  display: block;
+
+}
+
+.fa-info-circle {
+
+  font-size: 0.8em;
+}
+
+/* .tooltip {
+
+  width: 200px;
+  background: #eee;
+  margin: 5px 0;
+  padding: 5px;
+} */
