@@ -1,6 +1,8 @@
+// init pwd so we can start fresh
 
   let pwd = [];
 
+// Get some tooltips going
 
   $(document).ready(function() {
 
@@ -10,6 +12,7 @@
       title: 'Secret key',
       adjustPosition: true,
       adjustTracker: true,
+      pointer: 'top:+20',
       content: 'Enter at least 5 alphanumerical characters.',
       position: {
       	x: 'right',
@@ -21,10 +24,11 @@
     TooltipPhrase = new jBox('Tooltip', {
       attach: '.tooltip_phrase',
       target: '.input_phrase',
-      title: 'Phrase',
+      title: 'Name',
       adjustPosition: true,
       adjustTracker: true,
-      content: 'Enter any phrase/service name.',
+      pointer: 'top:+20',
+      content: 'Enter any word or name.',
       position: {
         x: 'right',
         y: 'center'
@@ -32,8 +36,16 @@
       outside: 'x'
     });
 
+
+    new jBox('Modal', {
+      attach: '#infobox',
+      title: 'Password Creator',
+      content: $('#infobox_content')
+    });
+
   });
 
+// We will need this later in order to produce the correct checksum for numbers in the PW which are smaller than 16
   const checksum = function(a) {
       return a < 10 ? a : a % 9;
   }
@@ -50,24 +62,29 @@ function password() {
   // prepare reference alphabet for index generation
   const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
+// define some elements
   const output = document.getElementById('pwd');
   const validation = document.getElementById('validation');
   const keyinput = document.getElementById('key');
   const phraseinput = document.getElementById('phrase');
 
+//clear textarea and init some variables
   output.innerHTML = '';
-  var phraseNum = [];
+  let phraseNum = [];
   pwd = [];
 
+// reset borders to normal (after warning/success)
   validation.innerHTML = '';
   keyinput.style.boxShadow = '';
   keyinput.style.border = '1px solid #bbb';
   phraseinput.style.boxShadow = '';
   phraseinput.style.border = '1px solid #bbb';
 
+//alert user if phrase is empty or key is less than 5 characters
+
 switch (true) {
   case phrase.length < 1:
-  validation.innerHTML = 'Yo! Throw me a bone here - I need a phrase.';
+  validation.innerHTML = 'A man needs a name.';
   phraseinput.style.boxShadow = '0px 0px 5px 1px rgba(255,0,0,0.75)';
   phraseinput.style.border = '1px solid red';
   return;
@@ -78,7 +95,7 @@ switch (true) {
 
   switch (true) {
     case key.length < 5:
-      validation.innerHTML = 'Yo! Check your <code>key.length</code>, dog! ' + keyinput.value.length + ' don\'t cut it.';
+      validation.innerHTML = 'Check your <code>key.length</code>, dog! ' + keyinput.value.length + ' don\'t cut it.';
       keyinput.style.boxShadow = '0px 0px 5px 1px rgba(255,0,0,0.75)';
       keyinput.style.border = '1px solid red';
       return;
@@ -178,5 +195,21 @@ switch (true) {
     phraseinput.style.transition = 'all 0.5s ease-out';
 
     phraseinput.placeholder = 'Success!'
+
+  setTimeout(function () {
+
+    keyinput.style.boxShadow = 'none';
+    keyinput.style.border = '1px solid #bbb';
+    keyinput.style.transition = 'all 0.5s ease-in';
+
+    keyinput.placeholder = 'Your secret key'
+
+    phraseinput.style.boxShadow = 'none';
+    phraseinput.style.border = '1px solid #bbb';
+    phraseinput.style.transition = 'all 0.5s ease-in';
+
+    phraseinput.placeholder = 'Any word'
+
+  }, 2500);
 
 }
